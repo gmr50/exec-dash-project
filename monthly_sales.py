@@ -109,7 +109,6 @@ worked_data = data.groupby(['product']).sum()
 
 
 
-print("************************")
 worked_data = worked_data.sort_values(['sales price'], ascending = False)
 
 
@@ -119,7 +118,7 @@ worked_data = pd.DataFrame(worked_data)
 
 
 
-print("************************")
+
 print("")
 print("Top 7 Selling Products:")
 print("_____________________________________")
@@ -155,12 +154,27 @@ print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
-print("-----------------------")
-print("VISUALIZING THE DATA...")
 
-plt.bar(item_list, sales_list, align='center', alpha=0.5)
 
-plt.show() # need to explicitly "show" the chart window
+print("Press B for bar chart, P for pie char, or any key to quit")
+user_selection = input()
+
+if(user_selection == 'B' or user_selection == 'b'):
+    print("-----------------------")
+    print("VISUALIZING THE DATA...")
+
+    plt.bar(item_list, sales_list, align='center', alpha=0.5)
+    plt.show() # need to explicitly "show" the chart window
+
+elif(user_selection == 'P' or user_selection == 'p'):
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sales_list, labels=item_list, autopct='%1.1f%%', shadow=True, startangle=90)
+    ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+    plt.show() # need to explicitly "show" the chart window
+
+
+print("Thank you!")
 
 
 
