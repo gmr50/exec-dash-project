@@ -9,10 +9,31 @@ import pandas as pd
 
 
 
+
+
+
+
+print(os.listdir("data/"))
+print("***************")
+current_files = os.listdir("data/")
+current_files = pd.DataFrame(current_files)
+print(current_files)
+
+print("Which file from your data folder would you like to examine?")
+
+counter =0
+for index, row in current_files.iterrows():
+
+	counter = counter + 1
+	detected_file_name = str(row[0])
+	
+	print(str(counter) + ") " + detected_file_name)
+
+
+
+
 filename = "sales-201803.csv"
-data = pd.read_csv(filename)
-
-
+data = pd.read_csv("data/" + str(filename))
 
 
 
