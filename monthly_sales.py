@@ -40,13 +40,12 @@ total_sales = data["sales price"].sum()
 #formats the data
 total_sales ='${:,.2f}'.format(total_sales)
 
-print("TOTAL MONTHLY SALES: " + str(total_sales))
+
 
 
 
 
 worked_data = data.groupby(['product']).sum()
-print(worked_data)
 
 
 
@@ -60,7 +59,7 @@ worked_data = worked_data.sort_values(['sales price'], ascending = False)
 
 worked_data = pd.DataFrame(worked_data)
 
-print(worked_data)
+
 
 print("************************")
 
@@ -80,7 +79,7 @@ for index, row in worked_data.iterrows():
 
 print("************************")
 
-
+print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
