@@ -21,6 +21,7 @@ print(current_files)
 
 print("Which file from your data folder would you like to examine?")
 
+#prints the file names
 counter =0
 for index, row in current_files.iterrows():
 
@@ -31,8 +32,33 @@ for index, row in current_files.iterrows():
 
 
 
+user_selection = 0
+user_selection = input()
 
-filename = "sales-201803.csv"
+user_selection = int(user_selection)
+user_selection = user_selection - 1
+
+print("break")
+print(user_selection)
+print(type(user_selection))
+
+
+
+# picked_file = str(current_files[user_selection])
+
+#accounts for index starting at 0
+
+
+filename = str(current_files.iloc[user_selection,0])
+
+print(filename)
+
+
+#key error
+
+
+
+#filename = "sales-201803.csv"
 data = pd.read_csv("data/" + str(filename))
 
 
