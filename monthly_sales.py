@@ -19,7 +19,7 @@ current_files = os.listdir("data/")
 current_files = pd.DataFrame(current_files)
 print(current_files)
 
-print("Which file from your data folder would you like to examine?")
+print("Which file from your data folder would you like to examine? (enter number)")
 
 #prints the file names
 counter =0
@@ -32,26 +32,31 @@ for index, row in current_files.iterrows():
 
 
 
+
+
 user_selection = 0
-user_selection = input()
-
-user_selection = int(user_selection)
-user_selection = user_selection - 1
-
-print("break")
-print(user_selection)
-print(type(user_selection))
 
 
+
+
+while True:
+	try:
+		user_selection = input()
+		user_selection = int(user_selection)
+		user_selection = user_selection - 1
+		
 
 # picked_file = str(current_files[user_selection])
-
 #accounts for index starting at 0
+#selects the filename from list of files
+		filename = str(current_files.iloc[user_selection,0])
 
+		break
+	except:
+		pass
+	
+	print("Try again! Enter file selection:")
 
-filename = str(current_files.iloc[user_selection,0])
-
-print(filename)
 
 
 #key error
