@@ -9,15 +9,21 @@ import pandas as pd
 
 
 
+import plotly.plotly as py
+import plotly.tools as tls
+
+
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 
 
-
-print(os.listdir("data/"))
 print("***************")
+print("Welcome to Graham's Executive Dashboard!")
 current_files = os.listdir("data/")
 current_files = pd.DataFrame(current_files)
-print(current_files)
+
 
 print("Which file from your data folder would you like to examine? (enter number)")
 
@@ -25,10 +31,10 @@ print("Which file from your data folder would you like to examine? (enter number
 counter =0
 for index, row in current_files.iterrows():
 
-	counter = counter + 1
-	detected_file_name = str(row[0])
-	
-	print(str(counter) + ") " + detected_file_name)
+    counter = counter + 1
+    detected_file_name = str(row[0])
+    
+    print(str(counter) + ") " + detected_file_name)
 
 
 
@@ -37,25 +43,25 @@ for index, row in current_files.iterrows():
 user_selection = 0
 
 
-
+#gets user file selection
 
 while True:
-	try:
-		user_selection = input()
-		user_selection = int(user_selection)
-		user_selection = user_selection - 1
-		
+    try:
+        user_selection = input()
+        user_selection = int(user_selection)
+        user_selection = user_selection - 1
+        
 
 # picked_file = str(current_files[user_selection])
 #accounts for index starting at 0
 #selects the filename from list of files
-		filename = str(current_files.iloc[user_selection,0])
+        filename = str(current_files.iloc[user_selection,0])
 
-		break
-	except:
-		pass
-	
-	print("Try again! Enter file selection:")
+        break
+    except:
+        pass
+    
+    print("Try again! Enter file selection:")
 
 
 
@@ -73,10 +79,10 @@ print("-----------------------")
 
 #adapted from Prof. Rosetti's filename solution
 def month_lookup(month):
-	year_month={'01':'January','02':'February','03':'March','04':'April',
-	'05':'May','06':'June','07':'July','08':'August','09':'September','10':'October',
-	'11':'November', '12':'December'}
-	return year_month[month]
+    year_month={'01':'January','02':'February','03':'March','04':'April',
+    '05':'May','06':'June','07':'July','08':'August','09':'September','10':'October',
+    '11':'November', '12':'December'}
+    return year_month[month]
 
 month = month_lookup(filename[-6:-4]) 
 year = int(filename[6:10])
@@ -114,33 +120,49 @@ worked_data = pd.DataFrame(worked_data)
 
 
 print("************************")
+print("")
+print("Top 7 Selling Products:")
+print("_____________________________________")
 
 
 #prints the top items
 
 counter = 0
+item_list = []
+sales_list = []
+
 for index, row in worked_data.iterrows():
 
-	counter = counter + 1
-	total_sale_item = float(row["sales price"])
-	total_sale_item ='${:,.2f}'.format(total_sale_item)
-	print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
+    counter = counter + 1
 
-    #print(index + ") " + str(row["product"]) + str(row["sales price"]))
+    if(counter <= 7):
+        total_sale_item = float(row["sales price"])
+        total_sale_item ='${:,.2f}'.format(total_sale_item)
+        print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
+
+        item_list.append(str(index))
+        sales_list.append(float(row["sales price"]))
 
 
-print("************************")
+        #print(index + ") " + str(row["product"]) + str(row["sales price"]))
+
+
+print("_____________________________________")
 
 print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
-print("-----------------------")
-print("TOP SELLING PRODUCTS:")
-print("  1) Button-Down Shirt: $6,960.35")
-print("  2) Super Soft Hoodie: $1,875.00")
-print("  3) etc.")
+
 
 print("-----------------------")
 print("VISUALIZING THE DATA...")
+
+plt.bar(item_list, sales_list, align='center', alpha=0.5)
+
+plt.show() # need to explicitly "show" the chart window
+
+
+
+
 
