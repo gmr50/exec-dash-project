@@ -1,9 +1,4 @@
-# TODO: import some modules and/or packages here
-
-# TODO: write some Python code here to produce the desired functionality...
-
-
-#products=sales['product'].unique()
+#imports packages
 import os
 import pandas as pd
 
@@ -17,7 +12,7 @@ import plotly.graph_objs as go
 
 
 
-print("***************")
+#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/os.md
 print("Welcome to Graham's Executive Dashboard!")
 current_files = os.listdir("data/")
 current_files = pd.DataFrame(current_files)
@@ -36,13 +31,11 @@ for index, row in current_files.iterrows():
 
 
 
-
-
 user_selection = 0
 
 
 #gets user file selection
-
+#https://stackoverflow.com/questions/9781373/a-try-catch-method-in-while-loop
 while True:
     try:
         user_selection = input()
@@ -50,7 +43,6 @@ while True:
         user_selection = user_selection - 1
         
 
-# picked_file = str(current_files[user_selection])
 #accounts for index starting at 0
 #selects the filename from list of files
         filename = str(current_files.iloc[user_selection,0])
@@ -76,29 +68,6 @@ while True:
     print("Try again! Enter file selection:")
 
 
-
-
-
-
-
-
-
-
-#exploration challenge #1
-#https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
-#https://stackoverflow.com/questions/19482970/get-list-from-pandas-dataframe-column-headers
-
-print(type(data))
-#print(data[1][1])
-
-
-
-
-detected_header_list = list(data)
-if detected_header_list == header_list:
-    print("Headers match!")
-#if(data[1][1] != "date"):
- #   print("Incorrect headers")
 
 
 print("-----------------------")
@@ -131,22 +100,19 @@ total_sales ='${:,.2f}'.format(total_sales)
 
 
 
+#https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
 
 worked_data = data.groupby(['product']).sum()
 
-
-
-
+#https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-object-to-dataframe
 
 worked_data = worked_data.sort_values(['sales price'], ascending = False)
-
-
 
 
 worked_data = pd.DataFrame(worked_data)
 
 
-#https://stackoverflow.com/questions/15943769/how-do-i-get-the-row-count-of-a-pandas-dataframe
+
 
 
 print("")
@@ -175,8 +141,6 @@ for index, row in worked_data.iterrows():
         sale_format = '${:,.2f}'.format(float(row["sales price"]))
         sales_list.append(sale_format)
 
-
-        #print(index + ") " + str(row["product"]) + str(row["sales price"]))
 
 
 print("_____________________________________")
@@ -253,9 +217,17 @@ layout = go.Layout(
 )
     
 
-
 figure = go.Figure(data=data, layout =layout)
 py.offline.plot(figure, filename="bar-char.html", auto_open=True)
+
+
+
+
+
+
+Figure = go.Pie(labels=item_list, values=sales_list)
+
+py.offline.plot([Figure], filename='basic_pie_chart', auto_open=True)
 
 
 
