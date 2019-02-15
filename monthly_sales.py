@@ -15,10 +15,6 @@ import plotly.graph_objs as go
 
 
 
-import matplotlib
-matplotlib.use("TkAgg")
-from matplotlib import pyplot as plt
-
 
 
 print("***************")
@@ -89,7 +85,9 @@ def month_lookup(month):
 month = month_lookup(filename[-6:-4]) 
 year = int(filename[6:10])
 
-print("Period: " + str(month) + " " + str(year))
+
+period = "Period: " + str(month) + " " + str(year)
+print(period)
 
 print("-----------------------")
 print("CRUNCHING THE DATA...")
@@ -122,11 +120,13 @@ worked_data = pd.DataFrame(worked_data)
 
 
 print("")
-print("Top 7 Selling Products:")
+print("Top " + str(len(worked_data.index)) + " Selling Products:")
 print("_____________________________________")
 
 
 #prints the top items
+#https://stackoverflow.com/questions/43968692/check-if-last-row-in-pandas-df-iterrows check if last row in dataframe
+#cases when there aren't 7 products
 
 counter = 0
 item_list = []
@@ -136,13 +136,14 @@ for index, row in worked_data.iterrows():
 
     counter = counter + 1
 
-    if(counter <= 7):
+    if(counter <= 7) or (counter == len(worked_data) - 2):
         total_sale_item = float(row["sales price"])
         total_sale_item ='${:,.2f}'.format(total_sale_item)
         print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
 
         item_list.append(str(index))
-        sales_list.append(float(row["sales price"]))
+        sale_format = '${:,.2f}'.format(float(row["sales price"]))
+        sales_list.append(sale_format)
 
 
         #print(index + ") " + str(row["product"]) + str(row["sales price"]))
@@ -181,6 +182,9 @@ print("TOTAL MONTHLY SALES: " + str(total_sales))
 # print("Thank you!")
 
 #https://plot.ly/python/bar-charts/
+#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/packages/plotly.md
+#plots chart using plotly 
+#https://plot.ly/python/figure-labels/
 
 data = [go.Bar(
             x=item_list,
@@ -188,7 +192,7 @@ data = [go.Bar(
             text=sales_list,
             textposition = 'auto',
             marker=dict(
-                color='rgb(158,202,225)',
+                color='rgb(219, 73, 40)',
                 line=dict(
                     color='rgb(8,48,107)',
                     width=1.5),
@@ -197,7 +201,31 @@ data = [go.Bar(
 
         )]
 
-py.offline.plot(data, filename="bar-char.html", auto_open=True)
+
+layout = go.Layout(
+    title='Top ' + str(len(item_list)) + ' products for ' + period,
+    xaxis=dict(
+        title='Product',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=18,
+            color='#7f7f7f'
+        )
+    ),
+    yaxis=dict(
+        title='Sales ($)',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=18,
+            color='#7f7f7f'
+        )
+    )
+)
+    
+
+
+figure = go.Figure(data=data, layout =layout)
+py.offline.plot(figure, filename="bar-char.html", auto_open=True)
 
 
 
