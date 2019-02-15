@@ -9,8 +9,10 @@ import pandas as pd
 
 
 
-import plotly.plotly as py
+import plotly as py
 import plotly.tools as tls
+import plotly.graph_objs as go
+
 
 
 import matplotlib
@@ -156,26 +158,46 @@ print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
-print("Press B for bar chart, P for pie char, or any key to quit")
-user_selection = input()
+# print("Press B for bar chart, P for pie char, or any key to quit")
+# user_selection = input()
 
-if(user_selection == 'B' or user_selection == 'b'):
-    print("-----------------------")
-    print("VISUALIZING THE DATA...")
+# if(user_selection == 'B' or user_selection == 'b'):
+#     print("-----------------------")
+#     print("VISUALIZING THE DATA...")
 
-    plt.bar(item_list, sales_list, align='center', alpha=0.5)
-    plt.show() # need to explicitly "show" the chart window
+#     plt.bar(item_list, sales_list, align='center', alpha=0.5)
+#     plt.title("Top 7 Sellers: " + str(month) + " " + str(year))
+#     plt.show() # need to explicitly "show" the chart window
 
-elif(user_selection == 'P' or user_selection == 'p'):
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sales_list, labels=item_list, autopct='%1.1f%%', shadow=True, startangle=90)
-    ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+# elif(user_selection == 'P' or user_selection == 'p'):
+#     fig1, ax1 = plt.subplots()
+#     ax1.pie(sales_list, labels=item_list, autopct='%1.1f%%', shadow=True, startangle=90)
+#     ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+#     plt.title("Top 7 Sellers: " + str(month) + " " + str(year))
 
-    plt.show() # need to explicitly "show" the chart window
+#     plt.show() # need to explicitly "show" the chart window
 
 
-print("Thank you!")
+# print("Thank you!")
 
+#https://plot.ly/python/bar-charts/
+
+data = [go.Bar(
+            x=item_list,
+            y=sales_list,
+            text=sales_list,
+            textposition = 'auto',
+            marker=dict(
+                color='rgb(158,202,225)',
+                line=dict(
+                    color='rgb(8,48,107)',
+                    width=1.5),
+            ),
+            opacity=0.6,
+
+        )]
+
+py.offline.plot(data, filename="bar-char.html", auto_open=True)
 
 
 
