@@ -54,7 +54,6 @@ while True:
 #accounts for index starting at 0
 #selects the filename from list of files
         filename = str(current_files.iloc[user_selection,0])
-
         break
     except:
         pass
@@ -70,6 +69,23 @@ while True:
 #filename = "sales-201803.csv"
 data = pd.read_csv("data/" + str(filename))
 
+
+
+#exploration challenge #1
+#https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
+#https://stackoverflow.com/questions/19482970/get-list-from-pandas-dataframe-column-headers
+
+print(type(data))
+#print(data[1][1])
+
+
+header_list = ["date","product","unit price","units sold","sales price"]
+
+detected_header_list = list(data)
+if detected_header_list == header_list:
+    print("Headers match!")
+#if(data[1][1] != "date"):
+ #   print("Incorrect headers")
 
 
 print("-----------------------")
@@ -117,10 +133,11 @@ worked_data = worked_data.sort_values(['sales price'], ascending = False)
 worked_data = pd.DataFrame(worked_data)
 
 
+#https://stackoverflow.com/questions/15943769/how-do-i-get-the-row-count-of-a-pandas-dataframe
 
 
 print("")
-print("Top " + str(len(worked_data.index)) + " Selling Products:")
+print("Top Selling Products:")
 print("_____________________________________")
 
 
