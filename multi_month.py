@@ -108,9 +108,6 @@ def month_lookup(month):
     return year_month[month]
 
 
-
-print(filename_list)
-print(filename_list[1])
 filename_counter = 0
 
 
@@ -120,8 +117,13 @@ print("-----------------------")
 
 
 multi_sales_list = []
+period_names_list = []
+total_sales_list = []
 
+def sortSecond(val): 
+    return val[1]  
 
+#https://stackoverflow.com/questions/44630805/pandas-loop-through-list-of-data-frames-and-change-index?rq=1
 for index, data_item in enumerate(data_sets):
 
 
@@ -133,22 +135,30 @@ for index, data_item in enumerate(data_sets):
 
     month = month_lookup(monthstr) 
     year = int(year_lookup)
-    period = "Period: " + str(month) + " " + str(year)
+    month_year = str(month) + " " + str(year)
+    period = "Period: " + month_year
+
+
+
+    period_names_list.append(month_year)
     
     print("-----------------------")
     print("-----------------------")    
     print(period)
 
 
-    print("XXXX")
-    print(data_sets[index])
 
     #finds the sum of the monthly sales 
     total_sales = data_sets[index]["sales price"].sum()
+    #https://stackoverflow.com/questions/8183146/two-dimensional-array-in-python
+
     #formats the data
     total_sales ='${:,.2f}'.format(total_sales)
 
-
+    total_sales_list.append([])
+    total_sales_list[index].append(filename_list[index])
+    total_sales_list[index].append(total_sales)
+    total_sales_list[index].append(month_year)
 
 
     #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
@@ -159,8 +169,6 @@ for index, data_item in enumerate(data_sets):
     #https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-object-to-dataframe
 
     worked_data = worked_data.sort_values(['sales price'], ascending = False)
-    print("++++")
-    print(worked_data)
 
     worked_data = pd.DataFrame(worked_data)
 
@@ -200,7 +208,17 @@ for index, data_item in enumerate(data_sets):
 
     print("TOTAL MONTHLY SALES: " + str(total_sales))
     multi_sales_list.append(sales_list)
-    print(multi_sales_list)
+
+
+print("_____________________________________")
+#https://www.geeksforgeeks.org/python-list-sort/
+total_sales_list.sort(key = sortSecond)
+
+
+
+print("Top Selling Period: " + str(total_sales_list[2][2]) + ", Sales: " + str(total_sales_list[2][1]))
+print("Lowest Selling Period: " + str(total_sales_list[0][2]) + ", Sales: " + str(total_sales_list[0][1]))
+
 
 #code left in for further developement 
 # print("Press B for bar chart, P for pie char, or any key to quit")
@@ -230,28 +248,25 @@ for index, data_item in enumerate(data_sets):
 #plots chart using plotly 
 #https://plot.ly/python/figure-labels/
 
-namestr1 = filename_list[0]
-namestr2 = filename_list[1]
-namestr3 = filename_list[2]
 
 trace1 = go.Bar(
     x=item_list,
     y=multi_sales_list[0],
-    name=namestr1
+    name=period_names_list[0]
 )
 
 
 trace2 = go.Bar(
     x=item_list,
     y=multi_sales_list[1],
-    name=namestr2
+    name=period_names_list[1]
 )
 
 
 trace3 = go.Bar(
     x=item_list,
     y=multi_sales_list[2],
-    name=namestr3
+    name=period_names_list[2]
 )
 
 
