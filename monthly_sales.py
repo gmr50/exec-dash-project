@@ -217,17 +217,30 @@ layout = go.Layout(
 )
     
 
-figure = go.Figure(data=data, layout =layout)
+figure = go.Figure(data=data, layout=layout)
 py.offline.plot(figure, filename="bar-char.html", auto_open=True)
 
 
 
 
+#pie chart
+#https://plot.ly/python/pie-charts/
+fig = {
+    'data': [
+        {
+        'labels': item_list,
+        'values': sales_list,
+        'type' : 'pie',
+        'name' : 'Top Sellers'
+    
+        }
+    ]
+}
 
 
-Figure = go.Pie(labels=item_list, values=sales_list)
+figure = go.Pie(labels=item_list, values=sales_list)
 
-py.offline.plot([Figure], filename='basic_pie_chart', auto_open=True)
+py.offline.plot(fig, filename="pie_chart.html", auto_open=True)
 
 
 
