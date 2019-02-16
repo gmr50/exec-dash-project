@@ -60,7 +60,7 @@ while True:
         user_selection = user_selection - 1
 
         filename2 = str(current_files.iloc[user_selection,0])
-        data2 = pd.read_csv("data/" + str(filename))
+        data2 = pd.read_csv("data/" + str(filename2))
 
 
 
@@ -71,7 +71,8 @@ while True:
         user_selection = user_selection - 1
 
         filename3 = str(current_files.iloc[user_selection,0])
-        data3 = pd.read_csv("data/" + str(filename))
+        data3 = pd.read_csv("data/" + str(filename3))
+
 
         #exploration challenge #1
         #https://stackoverflow.com/questions/2052390/manually-raising-throwing-an-exception-in-python
@@ -112,7 +113,16 @@ print(filename_list)
 print(filename_list[1])
 filename_counter = 0
 
-for data_item in data_sets:
+
+print("-----------------------")
+print("CRUNCHING THE DATA...")
+print("-----------------------")
+
+
+multi_sales_list = []
+
+
+for index, data_item in enumerate(data_sets):
 
 
     
@@ -124,16 +134,17 @@ for data_item in data_sets:
     month = month_lookup(monthstr) 
     year = int(year_lookup)
     period = "Period: " + str(month) + " " + str(year)
+    
+    print("-----------------------")
+    print("-----------------------")    
     print(period)
 
 
-
-    print("-----------------------")
-    print("CRUNCHING THE DATA...")
-    print("-----------------------")
+    print("XXXX")
+    print(data_sets[index])
 
     #finds the sum of the monthly sales 
-    total_sales = data_item["sales price"].sum()
+    total_sales = data_sets[index]["sales price"].sum()
     #formats the data
     total_sales ='${:,.2f}'.format(total_sales)
 
@@ -144,10 +155,12 @@ for data_item in data_sets:
 
     worked_data = data_item.groupby(['product']).sum()
 
+
     #https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-object-to-dataframe
 
     worked_data = worked_data.sort_values(['sales price'], ascending = False)
-
+    print("++++")
+    print(worked_data)
 
     worked_data = pd.DataFrame(worked_data)
 
@@ -186,11 +199,8 @@ for data_item in data_sets:
     print("_____________________________________")
 
     print("TOTAL MONTHLY SALES: " + str(total_sales))
-
-
-
-
-
+    multi_sales_list.append(sales_list)
+    print(multi_sales_list)
 
 #code left in for further developement 
 # print("Press B for bar chart, P for pie char, or any key to quit")
@@ -220,24 +230,36 @@ for data_item in data_sets:
 #plots chart using plotly 
 #https://plot.ly/python/figure-labels/
 
-data = [go.Bar(
-            x=item_list,
-            y=sales_list,
-            text=sales_list,
-            textposition = 'auto',
-            marker=dict(
-                color='rgb(219, 73, 40)',
-                line=dict(
-                    color='rgb(8,48,107)',
-                    width=1.5),
-            ),
-            opacity=0.6,
+namestr1 = filename_list[0]
+namestr2 = filename_list[1]
+namestr3 = filename_list[2]
 
-        )]
+trace1 = go.Bar(
+    x=item_list,
+    y=multi_sales_list[0],
+    name=namestr1
+)
+
+
+trace2 = go.Bar(
+    x=item_list,
+    y=multi_sales_list[1],
+    name=namestr2
+)
+
+
+trace3 = go.Bar(
+    x=item_list,
+    y=multi_sales_list[2],
+    name=namestr3
+)
+
+
+data = [trace1, trace2, trace3]
 
 
 layout = go.Layout(
-    title='Top ' + str(len(item_list)) + ' products for ' + period,
+    title='Top Products',
     xaxis=dict(
         title='Product',
         titlefont=dict(
@@ -253,12 +275,13 @@ layout = go.Layout(
             size=18,
             color='#7f7f7f'
         )
-    )
+    ),
+    barmode = 'group'
 )
     
 
 figure = go.Figure(data=data, layout=layout)
-py.offline.plot(figure, filename="bar-char.html", auto_open=True)
+py.offline.plot(figure, filename="bar-chart-multi.html", auto_open=True)
 
 
 
