@@ -95,6 +95,10 @@ while True:
 print("-----------------------")
 
 
+data_sets = [data, data2, data3]
+filename_list = [filename, filename2, filename3]
+
+
 #adapted from Prof. Rosetti's filename solution
 def month_lookup(month):
     year_month={'01':'January','02':'February','03':'March','04':'April',
@@ -102,72 +106,86 @@ def month_lookup(month):
     '11':'November', '12':'December'}
     return year_month[month]
 
-month = month_lookup(filename[-6:-4]) 
-year = int(filename[6:10])
 
 
-period = "Period: " + str(month) + " " + str(year)
-print(period)
+print(filename_list)
+print(filename_list[1])
+filename_counter = 0
 
-print("-----------------------")
-print("CRUNCHING THE DATA...")
-print("-----------------------")
-
-#finds the sum of the monthly sales 
-total_sales = data["sales price"].sum()
-#formats the data
-total_sales ='${:,.2f}'.format(total_sales)
+for data_item in data_sets:
 
 
+    
+    monthstr = filename_list[filename_counter][-6:-4]
+    year_lookup = filename_list[filename_counter][6:10]
 
+    filename_counter = filename_counter + 1
 
-
-#https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
-
-worked_data = data.groupby(['product']).sum()
-
-#https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-object-to-dataframe
-
-worked_data = worked_data.sort_values(['sales price'], ascending = False)
-
-
-worked_data = pd.DataFrame(worked_data)
+    month = month_lookup(monthstr) 
+    year = int(year_lookup)
+    period = "Period: " + str(month) + " " + str(year)
+    print(period)
 
 
 
+    print("-----------------------")
+    print("CRUNCHING THE DATA...")
+    print("-----------------------")
 
-
-print("")
-print("Top Selling Products:")
-print("_____________________________________")
-
-
-#prints the top items
-#https://stackoverflow.com/questions/43968692/check-if-last-row-in-pandas-df-iterrows check if last row in dataframe
-#cases when there aren't 7 products
-
-counter = 0
-item_list = []
-sales_list = []
-
-for index, row in worked_data.iterrows():
-
-    counter = counter + 1
-
-    if(counter <= 7) or (counter == len(worked_data) - 2):
-        total_sale_item = float(row["sales price"])
-        total_sale_item ='${:,.2f}'.format(total_sale_item)
-        print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
-
-        item_list.append(str(index))
-        sale_format = '${:,.2f}'.format(float(row["sales price"]))
-        sales_list.append(sale_format)
+    #finds the sum of the monthly sales 
+    total_sales = data_item["sales price"].sum()
+    #formats the data
+    total_sales ='${:,.2f}'.format(total_sales)
 
 
 
-print("_____________________________________")
 
-print("TOTAL MONTHLY SALES: " + str(total_sales))
+    #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+
+    worked_data = data_item.groupby(['product']).sum()
+
+    #https://stackoverflow.com/questions/10373660/converting-a-pandas-groupby-object-to-dataframe
+
+    worked_data = worked_data.sort_values(['sales price'], ascending = False)
+
+
+    worked_data = pd.DataFrame(worked_data)
+
+
+
+
+
+    print("")
+    print("Top Selling Products:")
+    print("_____________________________________")
+
+
+    #prints the top items
+    #https://stackoverflow.com/questions/43968692/check-if-last-row-in-pandas-df-iterrows check if last row in dataframe
+    #cases when there aren't 7 products
+
+    counter = 0
+    item_list = []
+    sales_list = []
+
+    for index, row in worked_data.iterrows():
+
+        counter = counter + 1
+
+        if(counter <= 7) or (counter == len(worked_data) - 2):
+            total_sale_item = float(row["sales price"])
+            total_sale_item ='${:,.2f}'.format(total_sale_item)
+            print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
+
+            item_list.append(str(index))
+            sale_format = '${:,.2f}'.format(float(row["sales price"]))
+            sales_list.append(sale_format)
+
+
+
+    print("_____________________________________")
+
+    print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
