@@ -152,7 +152,7 @@ print("TOTAL MONTHLY SALES: " + str(total_sales))
 
 
 
-
+#code left in for further developement 
 # print("Press B for bar chart, P for pie char, or any key to quit")
 # user_selection = input()
 
@@ -222,25 +222,6 @@ py.offline.plot(figure, filename="bar-char.html", auto_open=True)
 
 
 
-
-#pie chart
-#https://plot.ly/python/pie-charts/
-fig = {
-    'data': [
-        {
-        'labels': item_list,
-        'values': sales_list,
-        'type' : 'pie',
-        'name' : 'Top Sellers'
-    
-        }
-    ]
-}
-
-
-figure = go.Pie(labels=item_list, values=sales_list)
-
-py.offline.plot(fig, filename="pie_chart.html", auto_open=True)
 
 
 
