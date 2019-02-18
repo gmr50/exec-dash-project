@@ -123,6 +123,9 @@ total_sales_list = []
 def sortSecond(val): 
     return val[1]  
 
+def sortForth(val):
+    return val[3]
+
 #https://stackoverflow.com/questions/44630805/pandas-loop-through-list-of-data-frames-and-change-index?rq=1
 for index, data_item in enumerate(data_sets):
 
@@ -130,6 +133,7 @@ for index, data_item in enumerate(data_sets):
     
     monthstr = filename_list[filename_counter][-6:-4]
     year_lookup = filename_list[filename_counter][6:10]
+    combined_month_year = int(monthstr) + (100*int(year_lookup))
 
     filename_counter = filename_counter + 1
 
@@ -159,6 +163,7 @@ for index, data_item in enumerate(data_sets):
     total_sales_list[index].append(filename_list[index])
     total_sales_list[index].append(total_sales)
     total_sales_list[index].append(month_year)
+    total_sales_list[index].append(int(combined_month_year))
 
 
     #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
@@ -212,6 +217,16 @@ for index, data_item in enumerate(data_sets):
 
 print("_____________________________________")
 #https://www.geeksforgeeks.org/python-list-sort/
+
+#creates new list for plot
+month_by_month_total_sales = total_sales_list
+
+
+month_by_month_total_sales.sort(key = sortForth)
+month_by_month_sales_names =[]
+month_by_month_sales_names =[rows[2] for rows in month_by_month_total_sales]
+
+#sorts list to give top and bottom
 total_sales_list.sort(key = sortSecond)
 
 
@@ -220,28 +235,7 @@ print("Top Selling Period: " + str(total_sales_list[2][2]) + ", Sales: " + str(t
 print("Lowest Selling Period: " + str(total_sales_list[0][2]) + ", Sales: " + str(total_sales_list[0][1]))
 
 
-#code left in for further developement 
-# print("Press B for bar chart, P for pie char, or any key to quit")
-# user_selection = input()
 
-# if(user_selection == 'B' or user_selection == 'b'):
-#     print("-----------------------")
-#     print("VISUALIZING THE DATA...")
-
-#     plt.bar(item_list, sales_list, align='center', alpha=0.5)
-#     plt.title("Top 7 Sellers: " + str(month) + " " + str(year))
-#     plt.show() # need to explicitly "show" the chart window
-
-# elif(user_selection == 'P' or user_selection == 'p'):
-#     fig1, ax1 = plt.subplots()
-#     ax1.pie(sales_list, labels=item_list, autopct='%1.1f%%', shadow=True, startangle=90)
-#     ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
-#     plt.title("Top 7 Sellers: " + str(month) + " " + str(year))
-
-#     plt.show() # need to explicitly "show" the chart window
-
-
-# print("Thank you!")
 
 #https://plot.ly/python/bar-charts/
 #https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/packages/plotly.md
@@ -297,6 +291,20 @@ layout = go.Layout(
 
 figure = go.Figure(data=data, layout=layout)
 py.offline.plot(figure, filename="bar-chart-multi.html", auto_open=True)
+
+
+
+# Create a trace
+trace = go.Scatter(
+    x = month_by_month_sales_names,
+    y = [row[1] for row in month_by_month_total_sales],
+    name = 'Total Sales Over Time'
+)
+
+data1 = [trace]
+
+py.offline.plot(data1, filename='basic-line.html', auto_open =True)
+#https://plot.ly/python/line-charts/
 
 
 
