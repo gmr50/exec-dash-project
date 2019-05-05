@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 
 
 
-from exec_dash_revisited import to_usd
+from exec_dash_revisited import to_usd, get_top_sellers
 
 
 
@@ -125,6 +125,8 @@ print("-----------------------")
 multi_sales_list = []
 period_names_list = []
 total_sales_list = []
+item_list = [[],[],[]]
+counter = 0
 
 def sortSecond(val): 
     return val[1]  
@@ -163,8 +165,7 @@ for index, data_item in enumerate(data_sets):
     #https://stackoverflow.com/questions/8183146/two-dimensional-array-in-python
 
     #formats the data
-    #total_sales ='${:,.2f}'.format(total_sales)
-    total_sales = to_usd(total_sales)
+    
 
     total_sales_list.append([])
     total_sales_list[index].append(filename_list[index])
@@ -193,40 +194,39 @@ for index, data_item in enumerate(data_sets):
     print("_____________________________________")
 
 
-    #prints the top items
-    #https://stackoverflow.com/questions/43968692/check-if-last-row-in-pandas-df-iterrows check if last row in dataframe
-    #cases when there aren't 7 products
+    #**************************** revisited get top sellers ********************
 
-    counter = 0
-    item_list = []
+    #add sales function here
+    sales_dataframe = get_top_sellers(worked_data)
+
+
+
+    #reading data from the dataframe
     sales_list = []
-
-    for index, row in worked_data.iterrows():
-
-        counter = counter + 1
-
-        if(counter <= 7) or (counter == len(worked_data) - 2):
-            #total_sale_item = float(row["sales price"])
-            #changed for revisit
-            #total_sale_item ='${:,.2f}'.format(total_sale_item)
-            total_sale_item = to_usd(float(row["sales price"]))
-            print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
-
-            item_list.append(str(index))
-            #changed for revisit
-            #sale_format = '${:,.2f}'.format(float(row["sales price"]))
-            sale_format = to_usd(float(row["sales price"]))
-
-            sales_list.append(sale_format)
-
-
-
     print("_____________________________________")
 
-    print("TOTAL MONTHLY SALES: " + str(total_sales))
+    for item in sales_dataframe['sales_list']:
+        sales_list.append(item)
+
+    total_sales = sales_dataframe['total_sale'][0]
+    overall_total_sales = sales_dataframe['total_overall_sale'][0]
+
+    #sometimes there are more sales than just the 7 top ones
+    if(overall_total_sales > total_sales):
+        print("TOTAL MONTHLY SALES (TOP): " + to_usd(total_sales))
+        print("TOTAL MONTHLY SALES (ALL): " + to_usd(overall_total_sales))
+    else:
+        print("TOTAL MONTHLY SALES: " + to_usd(total_sales))
+
+
     multi_sales_list.append(sales_list)
 
 
+    for item in sales_dataframe['item_list']:
+        item_list[counter].append(item)
+    counter = counter + 1
+print("-----------------------")
+print("-----------------------")    
 print("_____________________________________")
 #https://www.geeksforgeeks.org/python-list-sort/
 
@@ -238,14 +238,18 @@ month_by_month_total_sales.sort(key = sortForth)
 month_by_month_sales_names =[]
 month_by_month_sales_names =[rows[2] for rows in month_by_month_total_sales]
 
+
+
 #sorts list to give top and bottom
 total_sales_list.sort(key = sortSecond)
 
 
 
-print("Top Selling Period: " + str(total_sales_list[2][2]) + ", Sales: " + str(total_sales_list[2][1]))
-print("Lowest Selling Period: " + str(total_sales_list[0][2]) + ", Sales: " + str(total_sales_list[0][1]))
 
+print("Top Selling Period: " + str(total_sales_list[2][2]) + ", Sales: " + to_usd(total_sales_list[2][1]))
+print("Lowest Selling Period: " + str(total_sales_list[0][2]) + ", Sales: " + to_usd(total_sales_list[0][1]))
+print("_____________________________________")
+print("Generating graphs in browser...")
 
 
 
@@ -256,21 +260,24 @@ print("Lowest Selling Period: " + str(total_sales_list[0][2]) + ", Sales: " + st
 
 
 trace1 = go.Bar(
-    x=item_list,
+    x=item_list[0],
     y=multi_sales_list[0],
     name=period_names_list[0]
 )
 
 
+
+
 trace2 = go.Bar(
-    x=item_list,
+    x=item_list[1],
     y=multi_sales_list[1],
     name=period_names_list[1]
 )
 
 
+
 trace3 = go.Bar(
-    x=item_list,
+    x=item_list[2],
     y=multi_sales_list[2],
     name=period_names_list[2]
 )
