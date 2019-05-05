@@ -179,6 +179,7 @@ print("TOTAL MONTHLY SALES: " + str(total_sales))
 #https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/packages/plotly.md
 #plots chart using plotly 
 #https://plot.ly/python/figure-labels/
+#https://plot.ly/python/bar-charts/#grouped-bar-chart
 
 data = [go.Bar(
             x=item_list,

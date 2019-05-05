@@ -1,6 +1,7 @@
 #imports packages
 import os
 import pandas as pd
+import sys
 
 
 
@@ -9,6 +10,8 @@ import plotly.tools as tls
 import plotly.graph_objs as go
 
 
+
+from exec_dash_revisited import to_usd
 
 
 
@@ -85,6 +88,9 @@ while True:
             print("File Headers do not match")
             raise Exception
         break
+    except(KeyboardInterrupt):
+        print("User Quit! Thank You!")
+        sys.exit()
     except:
         pass
     
@@ -157,7 +163,8 @@ for index, data_item in enumerate(data_sets):
     #https://stackoverflow.com/questions/8183146/two-dimensional-array-in-python
 
     #formats the data
-    total_sales ='${:,.2f}'.format(total_sales)
+    #total_sales ='${:,.2f}'.format(total_sales)
+    total_sales = to_usd(total_sales)
 
     total_sales_list.append([])
     total_sales_list[index].append(filename_list[index])
@@ -199,12 +206,17 @@ for index, data_item in enumerate(data_sets):
         counter = counter + 1
 
         if(counter <= 7) or (counter == len(worked_data) - 2):
-            total_sale_item = float(row["sales price"])
-            total_sale_item ='${:,.2f}'.format(total_sale_item)
+            #total_sale_item = float(row["sales price"])
+            #changed for revisit
+            #total_sale_item ='${:,.2f}'.format(total_sale_item)
+            total_sale_item = to_usd(float(row["sales price"]))
             print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
 
             item_list.append(str(index))
-            sale_format = '${:,.2f}'.format(float(row["sales price"]))
+            #changed for revisit
+            #sale_format = '${:,.2f}'.format(float(row["sales price"]))
+            sale_format = to_usd(float(row["sales price"]))
+
             sales_list.append(sale_format)
 
 
