@@ -35,9 +35,14 @@ def get_top_sellers(worked_data):
 			total_sale_item = (float(row["sales price"]))
 			total_sale = total_sale + total_sale_item
 			total_sale_item = to_usd(total_sale_item)
+
 			print(str(counter) + ") " + str(index) + ": " + str(total_sale_item))
 
+
+
 			item_list.append(str(index))
+			#item_list.append(str(row['Name:']))
+			#item_list.append(str(row["product"]))
 			#changed for revisit
 			#sale_format = '${:,.2f}'.format(float(row["sales price"]))
 			#sale_format = to_usd(float(row["sales price"]))
